@@ -147,7 +147,7 @@ try:
 except KeyboardInterrupt:
     pass
 
-except Exception:
+except Exception as e:
     save_checkpoint({
         'args': args,
         'epoch': epoch + 1,
@@ -157,3 +157,4 @@ except Exception:
         'time': epoch_times[epoch - 1],
     }, True,
         filename=os.path.join('crash_recovery', args.savefile))
+    raise e
