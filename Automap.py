@@ -10,7 +10,7 @@ import uuid
 from models import NETWORKNAME
 import training
 import torch.utils.data as data_utils
-import ImgNetLoader
+import Loader
 from training import train_NETWORKNAME, test_NETWORKNAME
 # Arg parsing
 parser = argparse.ArgumentParser(description='NETWORKNAME Implementation')
@@ -73,8 +73,8 @@ if args.cuda:
 optimizer = optim.Adam(model.parameters(), lr=args.lr)
 
 #Dataset
-dataset_test = ImgNetLoader('data/test')
-dataset_train = ImgNetLoader('data/train')
+dataset_test = Loader('data/test')
+dataset_train = Loader('data/train')
 
 kwargs = {'num_workers': 0, 'pin_memory': True} if args.cuda else {}
 
@@ -86,6 +86,8 @@ test_loader = torch.utils.data.DataLoader(dataset_test,
 if not os.path.isdir('models'):
     os.mkdir('models')
 
+if not os.path.isdir('crash_recovery'):
+    os.mkdir('crash_recovery')
 # Training / Tracking
 
 trainer = train_NETWORKNAME
@@ -153,5 +155,5 @@ except Exception:
         'state_dict': model.state_dict(),
         'optimizer': optimizer.state_dict(),
         'time': epoch_times[epoch - 1],
-    }, is_best,
-        filename=os.path.join('models', args.savefile))
+    }, True,
+        filename=os.path.join('crash_recovery', args.savefile))

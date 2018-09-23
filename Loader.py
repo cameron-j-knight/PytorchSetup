@@ -6,18 +6,13 @@ import os
 
 transform = torchvision.transforms.ToTensor()
 
-class ImageNet(data_utils.Dataset):
-    """
-    Creates a Pytorch Dataset for ImageNet.
-    """
+class customLoader(data_utils.Dataset):
     def __init__(self, dir='data/'):
-        self.files = glob.glob(os.path.join(dir,'*.png'))
+        self.files = glob.glob(os.path.join(dir))
 
     def __len__(self):
-        'Denotes the total number of samples'
         return len(self.files)
 
     def __getitem__(self, index):
-        x = Image.open(self.files[index])
-        x = transform(x)
+        x = open(self.files[index])
         return x
