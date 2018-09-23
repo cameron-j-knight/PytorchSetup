@@ -29,7 +29,6 @@ def train_NETWORKNAME(train_loader, model, optimizer, epoch, args=Namespace()):
 
 def test_NETWORKNAME(test_loader, model, epoch, args=Namespace()):
     model.eval()
-    model.double()
     test_loss = 0
     correct = 0
     total = 0
