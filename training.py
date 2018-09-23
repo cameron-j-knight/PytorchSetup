@@ -3,7 +3,7 @@ from argparse import Namespace
 import torch.nn.functional as F
 import torch
 
-def loss(recon_x, x):
+def loss_function(recon_x, x):
     return torch.mean((recon_x - x) ** 2)
 
 def train_NETWORKNAME(train_loader, model, optimizer, epoch, args=Namespace()):
@@ -15,7 +15,7 @@ def train_NETWORKNAME(train_loader, model, optimizer, epoch, args=Namespace()):
             data = data.cuda()
 
         recon_batch = model(data)
-        loss = loss(recon_batch, data)
+        loss = loss_function(recon_batch, data)
 
         optimizer.zero_grad()
         loss.backward()
@@ -38,7 +38,7 @@ def test_NETWORKNAME(test_loader, model, epoch, args=Namespace()):
             data, label = data.cuda(), label.cuda()
 
         recon_batch =  model(data)
-        loss = loss(recon_batch, data)
+        loss = loss_function(recon_batch, data)
 
         test_loss += loss.data.item()
 
