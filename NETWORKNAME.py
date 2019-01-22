@@ -12,6 +12,8 @@ import training
 import torch.utils.data as data_utils
 import Loader
 from training import train_NETWORKNAME, test_NETWORKNAME
+from visdom import Visdom
+
 # Arg parsing
 parser = argparse.ArgumentParser(description='NETWORKNAME Implementation')
 
@@ -43,6 +45,15 @@ parser.add_argument('--uuid', type=str, default=uuid(), help='(somewhat) unique 
 parser.add_argument('--hidden', type=int, default=500, help='hidden states')
 parser.add_argument('--verbose', action='store_true', default=False,
                     help='enables verbose logging')
+
+parser.add_argument('--visdom', action='store_true', default=False,
+                    help='enables enables visdom as the method to show resaults')
+parser.add_argument('--port', type=int, default=8097, help='port that the visdom server is running on')
+parser.add_argument('--server', type=str, default="https://localhost", help='server adress of target.')
+
+
+# Visdom Setup
+if args
 # determinisim
 np.random.seed(0)
 torch.manual_seed(0)
@@ -51,7 +62,19 @@ global args
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 
+
+# Visdom Setup
+if args.visdom:
+    try:
+        vis = Visdom(port=args.port, server=args.server)
+        assert vis.check_connection(timeout_seconds=3), \
+                'no connection could be quickly formed'
+
+
+# determinisim
+np.random.seed(args.seed)
 torch.manual_seed(args.seed)
+
 if args.cuda:
     torch.cuda.manual_seed(args.seed)
 
