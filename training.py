@@ -22,7 +22,7 @@ def train_NETWORKNAME(train_loader, model, optimizer, epoch, args=Namespace()):
         train_loss += loss.data.item()
         optimizer.step()
         if batch_idx % args.log_interval == 0:
-            print('Epoch: {}    Loss: {}'.format(epoch, loss.data.item()))
+            #print('Epoch: {}    Loss: {}'.format(epoch, loss.data.item()))
             sys.stdout.flush()
 
     return train_loss / len(train_loader.dataset)
@@ -42,7 +42,7 @@ def test_NETWORKNAME(test_loader, model, epoch, args=Namespace()):
 
         test_loss += loss.data.item()
 
-    print('====> Test loss: {:.3f}'.format(test_loss))
+    #print('====> Test loss: {:.3f}'.format(test_loss))
     sys.stdout.flush()
     return test_loss
 

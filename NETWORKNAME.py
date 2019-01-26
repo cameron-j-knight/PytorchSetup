@@ -13,6 +13,7 @@ import torch.utils.data as data_utils
 import Loader
 from training import train_NETWORKNAME, test_NETWORKNAME
 from visdom import Visdom
+from tqdm import trange
 
 # Arg parsing
 parser = argparse.ArgumentParser(description='NETWORKNAME Implementation')
@@ -69,7 +70,8 @@ if args.visdom:
         vis = Visdom(port=args.port, server=args.server)
         assert vis.check_connection(timeout_seconds=3), \
                 'no connection could be quickly formed'
-
+    catch Exception as e:
+        print(e.message)
 
 # determinisim
 np.random.seed(args.seed)
@@ -147,13 +149,15 @@ if args.train_from is not None:
 
 try:
     start = time.time()
-    for epoch in range(1, args.epochs + 1):
-        train_scores[epoch - 1] = trainer(train_loader, model, optimizer, epoch, args)
+    t = trange(args.epochs)
+    for epoch in t:
+        train_scores[epoch] = trainer(train_loader, model, optimizer, epoch, args)
         valid_loss = validator(test_loader, model, epoch, args)
-        validation_scores[epoch - 1] = valid_loss
+        validation_scores[epoch] = valid_loss
+        t.set_postfix(epoch=epoch+1, train_loss=train_scores[epoch], valid_loss=valid_loss]
+        epoch_times[epoch] = time.time() - start
 
-        epoch_times[epoch - 1] = time.time() - start
-
+        
         is_best = valid_loss < best_valid
         best_valid = min(best_valid, valid_loss)  # do something with best_test / save it
 
@@ -163,7 +167,7 @@ try:
             'best_valid': best_valid,
             'state_dict': model.state_dict(),
             'optimizer': optimizer.state_dict(),
-            'time': epoch_times[epoch - 1],
+            'time': epoch_times[epoch],
         }, is_best,
             filename=os.path.join('models', args.savefile))
 
