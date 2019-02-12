@@ -10,7 +10,7 @@ import uuid
 from models import NETWORKNAME
 import training
 import torch.utils.data as data_utils
-import Loader
+import Dataset imoport NETWORKNAME_dataset
 from training import train_NETWORKNAME, test_NETWORKNAME
 from visdom import Visdom
 from tqdm import trange
@@ -42,7 +42,7 @@ parser.add_argument('--savefile', type=str, default='NETWORKNAME',
                     help='save file name')
 parser.add_argument('--lr', type=float, default=1e-3,
                     help='learning rate')
-parser.add_argument('--uuid', type=str, default=uuid(), help='(somewhat) unique identifier for the model/job')
+parser.add_argument('--uuid', type=str, default=uuid.uuid1(), help='(somewhat) unique identifier for the model/job')
 parser.add_argument('--hidden', type=int, default=500, help='hidden states')
 parser.add_argument('--verbose', action='store_true', default=False,
                     help='enables verbose logging')
@@ -52,9 +52,6 @@ parser.add_argument('--visdom', action='store_true', default=False,
 parser.add_argument('--port', type=int, default=8097, help='port that the visdom server is running on')
 parser.add_argument('--server', type=str, default="https://localhost", help='server adress of target.')
 
-
-# Visdom Setup
-if args
 # determinisim
 np.random.seed(0)
 torch.manual_seed(0)
@@ -70,7 +67,7 @@ if args.visdom:
         vis = Visdom(port=args.port, server=args.server)
         assert vis.check_connection(timeout_seconds=3), \
                 'no connection could be quickly formed'
-    catch Exception as e:
+     except Exception as e:
         print(e.message)
 
 # determinisim
@@ -98,8 +95,8 @@ if args.cuda:
 optimizer = optim.Adam(model.parameters(), lr=args.lr)
 
 #Dataset
-dataset_test = Loader('data/test')
-dataset_train = Loader('data/train')
+dataset_test = NETOWRKNAME_dataset('data/test')
+dataset_train = NETOWORKNAME_dataset('data/train')
 
 kwargs = {'num_workers': 0, 'pin_memory': True} if args.cuda else {}
 
@@ -154,7 +151,7 @@ try:
         train_scores[epoch] = trainer(train_loader, model, optimizer, epoch, args)
         valid_loss = validator(test_loader, model, epoch, args)
         validation_scores[epoch] = valid_loss
-        t.set_postfix(epoch=epoch+1, train_loss=train_scores[epoch], valid_loss=valid_loss]
+        t.set_postfix(epoch=epoch+1, train_loss=train_scores[epoch], valid_loss=valid_loss)
         epoch_times[epoch] = time.time() - start
 
         

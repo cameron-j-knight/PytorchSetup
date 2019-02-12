@@ -6,7 +6,7 @@ import os
 
 transform = torchvision.transforms.ToTensor()
 
-class customLoader(data_utils.Dataset):
+class NETWORKNAME_dataset(data_utils.Dataset):
     def __init__(self, dir='data/'):
         self.files = glob.glob(os.path.join(dir))
 
